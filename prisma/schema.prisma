@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "binary" 
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  name      String   @db.VarChar(63)
+  nickname  String   @db.VarChar(45) @unique
+  email     String   @db.VarChar(127)
+  password  String   @db.VarChar(127)
+  notes     Note[]
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("users")
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(63)
+  content   String   @db.VarChar(127)
+  author    User     @relation(fields: [authorNickname], references: [nickname])
+  authorNickname  String
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("notes")
+}
