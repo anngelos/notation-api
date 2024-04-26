@@ -1,22 +1,10 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { CreateNoteDTO } from './dto/create-note.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('notes')
 export class NoteController {
-  constructor(
-    private readonly noteService: NoteService,
-    private readonly prisma: PrismaService
-  ) {}
+  constructor(private readonly noteService: NoteService) {}
 
   @Post()
   async createNote(@Body() data: CreateNoteDTO) {
@@ -32,5 +20,7 @@ export class NoteController {
   async editNote() {}
 
   @Delete(':id')
-  async deleteNote() {}
+  async deleteNote(@Param('id', ParseIntPipe) id) {
+    return this.noteService.deleteNote(id);
+  }
 }

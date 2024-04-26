@@ -17,6 +17,12 @@ export class NoteService {
     }
   }
 
+  async existsNote(id: number) {
+    if (!(await this.prisma.note.count({ where: { id } }))) {
+      throw new NotFoundException(`A nota ${id} não existe.`);
+    }
+  }
+
   async createNote(@Body() data: CreateNoteDTO) {
     const { authorNickname } = data;
 
@@ -42,6 +48,15 @@ export class NoteService {
       where: {
         authorNickname: nickname,
       },
+    });
+  }
+
+  async editNote() {}
+
+  async deleteNote(id: number) {
+    await this.existsNote(id);
+    return this.prisma.note.delete({
+      where: { id }
     });
   }
 }
