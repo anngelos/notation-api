@@ -2,6 +2,7 @@ import { Body, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNoteDTO } from './dto/create-note.dto';
+import { UpdatePatchNoteDTO } from './dto/update-patch-note.dto';
 
 @Injectable()
 export class NoteService {
@@ -51,7 +52,13 @@ export class NoteService {
     });
   }
 
-  async editNote() {}
+  async editNote(id: number, data: UpdatePatchNoteDTO) {
+    await this.existsNote(id);
+    return this.prisma.note.update({
+      data,
+      where: { id }
+    });
+  }
 
   async deleteNote(id: number) {
     await this.existsNote(id);

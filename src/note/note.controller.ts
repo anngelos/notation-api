@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { CreateNoteDTO } from './dto/create-note.dto';
+import { UpdatePatchNoteDTO } from './dto/update-patch-note.dto';
 
 @Controller('notes')
 export class NoteController {
@@ -17,7 +18,9 @@ export class NoteController {
   }
 
   @Patch(':id')
-  async editNote() {}
+  async editNote(@Body() data: UpdatePatchNoteDTO, @Param('id', ParseIntPipe) id) {
+    return this.noteService.editNote(id, data);
+  }
 
   @Delete(':id')
   async deleteNote(@Param('id', ParseIntPipe) id) {
