@@ -74,35 +74,6 @@ export class AuthService {
     return this.createToken(user);
   }
 
-  async forget(email: string) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email,
-      },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException('O Email está incorreto.');
-    }
-
-    // enviar o email pra pessoa com o processo...
-
-    return true;
-  }
-
-  async reset(password: string, token: string) {
-    // validar o token
-
-    const id = 0;
-
-    const user = await this.prisma.user.update({
-      where: { id },
-      data: { password },
-    });
-
-    return this.createToken(user);
-  }
-
   async register(data: AuthRegisterDTO) {
     const user = await this.userService.create(data);
     return this.createToken(user);
