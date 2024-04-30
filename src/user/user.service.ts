@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
@@ -20,7 +24,25 @@ export class UserService {
 
   async create(data: CreateUserDTO) {
     if (!data.name || !data.nickname || !data.email || !data.password) {
-      throw new BadRequestException('Preencha todos os campos para criar um novo usuário.');
+      throw new BadRequestException(
+        'Preencha todos os campos para criar um novo usuário.',
+      );
+    }
+
+    const existingNickname = await this.prisma.user.count({
+      where: { nickname: data.nickname },
+    });
+
+    if (existingNickname) {
+      throw new BadRequestException('Apelido já existente.');
+    }
+
+    const existingEmail = await this.prisma.user.count({
+      where: { email: data.email },
+    });
+
+    if (existingEmail) {
+      throw new BadRequestException('E-mail já existente.');
     }
 
     data.password = data.password;
@@ -42,8 +64,12 @@ export class UserService {
 
   async updatePartial(id: number, data: UpdatePatchUserDTO) {
     await this.exists(id);
-    const salt = await bcrypt.genSalt();
-    data.password = await bcrypt.hash(data.password, salt);
+    
+    if (data.password) {
+      const salt = await bcrypt.genSalt();
+      data.password = await bcrypt.hash(data.password, salt);
+    }
+
     return this.prisma.user.update({
       data,
       where: { id },
