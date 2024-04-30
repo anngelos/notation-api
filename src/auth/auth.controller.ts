@@ -6,6 +6,7 @@ import {
   Headers,
   UseGuards,
   Req,
+  Get,
 } from '@nestjs/common';
 import { AuthLoginDTO } from './dto/auth-login.dto';
 import { AuthRegisterDTO } from './dto/auth-register.dto';
@@ -33,7 +34,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('me')
+  @Get('me')
   async me(@User() user) {
     return { user };
   }
