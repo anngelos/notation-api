@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
@@ -19,6 +19,10 @@ export class UserService {
   }
 
   async create(data: CreateUserDTO) {
+    if (!data.name || !data.nickname || !data.email || !data.password) {
+      throw new BadRequestException('Preencha todos os campos para criar um novo usuário.');
+    }
+
     data.password = data.password;
     const salt = await bcrypt.genSalt();
     data.password = await bcrypt.hash(data.password, salt);
