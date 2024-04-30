@@ -1,4 +1,4 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Body, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNoteDTO } from './dto/create-note.dto';
@@ -27,6 +27,10 @@ export class NoteService {
   async createNote(@Body() data: CreateNoteDTO) {
     const { authorNickname } = data;
 
+    if (!data.title || !data.content || !data.authorNickname) {
+      throw new BadRequestException('Preencha todos os campos para criar uma nota.');
+    }
+        
     await this.existsAuthor(authorNickname);
 
     const noteData: Prisma.NoteCreateInput = {
