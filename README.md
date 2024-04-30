@@ -6,8 +6,12 @@ In summary, the Notation-API provides a robust platform for user management and 
 
 ## Stack
 
-JavaScript | TypeScript | NestJS | Prisma ORM | MySQL
+JavaScript | TypeScript | NestJS | Prisma ORM | MySQL | Swagger
 
 ## Run the project
 
-In the terminal, navigate to the root of the project and run the command `npm install` to install all dependencies. Run the command `npm run dev` to start the project. Remembering that to test the application's routes, it will be necessary to have Insomnia or Postman installed on your machine.
+In the terminal, navigate to the root of the project and run the command `npm install` to install all dependencies. Run the command `npm run dev` to start the project. Remembering that to test the application's routes, it will be necessary to have Insomnia or Postman and MySQL installed on your machine.
+
+## Docs
+
+If you have any doubts about how the API works, just type the address **localhost:3000/docs** in your browser to access the documentation.
