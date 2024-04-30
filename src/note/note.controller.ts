@@ -31,7 +31,7 @@ export class NoteController {
 
   @Delete(':id')
   @ApiForbiddenResponse({ description: 'Acesso negado. Apenas usuários autenticados.' })
-  async deleteNote(@Param('id', ParseIntPipe) id) {
-    return this.noteService.deleteNote(id);
+  async deleteNote(@Param('id', ParseIntPipe) id, @Body('nickname') userNickname: string) {
+    return this.noteService.deleteNote(id, userNickname);
   }
 }
