@@ -78,6 +78,16 @@ export class UserService {
 
   async delete(id: number) {
     await this.exists(id);
+
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { notes: true }
+    })
+
+    if (user.notes.length > 0) {
+      throw new BadRequestException('Este usuário possui notas vinculadas e não pode ser excluído até que suas notas sejam removidas do sistema.');
+    }
+
     return this.prisma.user.delete({
       where: { id },
     });
