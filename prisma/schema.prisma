@@ -16,19 +16,19 @@ model User {
   password  String   @db.VarChar(127)
   notes     Note[]
   createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
 
   @@map("users")
 }
 
 model Note {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(63)
-  content   String   @db.VarChar(127)
-  author    User     @relation(fields: [authorNickname], references: [nickname])
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(63)
+  content         String   @db.VarChar(127)
+  author          User     @relation(fields: [authorNickname], references: [nickname])
   authorNickname  String
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @db.Timestamp(0)
+  createdAt       DateTime @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime @updatedAt @db.Timestamp(0)
 
   @@map("notes")
 }
